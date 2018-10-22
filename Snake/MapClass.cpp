@@ -4,11 +4,11 @@ MapClass::MapClass() {
 	mapTiles = NULL;
 }
 
-MapClass::MapClass(sf::Vector2u windowSize) {
-	//std::srand(std::time(0));
+MapClass::MapClass(sf::Vector2u windowSize, bool random) : scoreBoard() {
+	if(random)std::srand(std::time(0));
 	mapTiles = NULL;
 	numAcross = (windowSize.x / BOX_SIZE);
-	numDown = (windowSize.y / BOX_SIZE);
+	numDown = ((windowSize.y - SCOREBOARD_HEIGHT) / BOX_SIZE);
 
 	mapTiles = new BoxClass*[numDown];
 	for (int i = 0; i < numDown; i++) {
@@ -17,7 +17,7 @@ MapClass::MapClass(sf::Vector2u windowSize) {
 
 	for (int i = 0; i < numDown; i++) {
 		for (int j = 0; j < numAcross; j++) {
-			sf::Vector2u loc(j*BOX_SIZE, i*BOX_SIZE);
+			sf::Vector2u loc(j*BOX_SIZE, i*BOX_SIZE + SCOREBOARD_HEIGHT);
 			mapTiles[i][j] = BoxClass(loc, BLACK);
 		}
 	}
@@ -29,11 +29,13 @@ MapClass::~MapClass() {
 }
 
 void MapClass::draw(sf::RenderWindow &window) {
+	
 	for (int i = 0; i < numDown; i++) {
 		for (int j = 0; j < numAcross; j++) {
 			mapTiles[i][j].draw(window);
 		}
 	}
+	scoreBoard.draw(window);
 }
 
 void MapClass::setExteriorWalls() {
@@ -66,7 +68,7 @@ sf::Vector2u MapClass::getRandLocation(){
 }
 
 sf::Vector2u MapClass::getCenterLocation() {
-	sf::Vector2u center(numAcross/2,numAcross/2);
+	sf::Vector2u center(numDown/2, numAcross/2);
 	return center;
 }
 
@@ -74,4 +76,8 @@ int MapClass::changeBoxColor(sf::Vector2u location, int inColor){
 	int prevColor = mapTiles[location.x][location.y].getColor();
 	mapTiles[location.x][location.y].setColor(inColor);
 	return prevColor;
+}
+
+void MapClass::updateScore() {
+	scoreBoard.updateScore();
 }

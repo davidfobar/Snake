@@ -139,6 +139,7 @@
     <ClCompile Include="FoodClass.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapClass.cpp" />
+    <ClCompile Include="ScoreBoardClass.cpp" />
     <ClCompile Include="SnakeBodyNodeClass.cpp" />
     <ClCompile Include="SnakeClass.cpp" />
   </ItemGroup>
@@ -147,8 +148,12 @@
     <ClInclude Include="BoxClass.h" />
     <ClInclude Include="FoodClass.h" />
     <ClInclude Include="MapClass.h" />
+    <ClInclude Include="ScoreBoardClass.h" />
     <ClInclude Include="SnakeBodyNodeClass.h" />
     <ClInclude Include="SnakeClass.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="arial.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

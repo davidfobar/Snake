@@ -5,13 +5,15 @@
 #include "FoodClass.h"
 #include "SnakeClass.h"
 
+const bool ENABLE_RANDOM = false;
 const float TIME_STEP_PER_ROUND = .95;
+const int INITIAL_TIME_PER_ROUND = 100; //milliseconds
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(600, 600), "Snake!");
+	sf::RenderWindow window(sf::VideoMode(500, 600), "Snake!");
 
-	MapClass map(window.getSize());
+	MapClass map(window.getSize(), ENABLE_RANDOM);
 	SnakeClass snake(map);
 	FoodClass food;
 	food.createNew(map);
@@ -20,12 +22,12 @@ int main()
 	{
 		static int nextMove = UP;
 		static bool inputAccepted = false;
-		static int timePerRound = 200; //milliseconds
+		static int timePerRound = INITIAL_TIME_PER_ROUND; 
 
 		sf::Event event;
 		while (window.pollEvent(event)){
 			if (event.type == sf::Event::Closed) window.close();
-			else if (event.type == sf::Event::KeyReleased && !inputAccepted) {
+			else if (event.type == sf::Event::KeyPressed && !inputAccepted) {
 				if (event.key.code == sf::Keyboard::Left && nextMove != RIGHT) {
 					nextMove = LEFT; 
 					inputAccepted = true;

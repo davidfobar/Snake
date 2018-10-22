@@ -47,6 +47,7 @@ int SnakeClass::move(MapClass &map, int dir) {
 	}
 	else if (moveResult == BLUE) {
 		moveResult = EAT_FOOD;
+		map.updateScore();
 	}
 	else {
 		map.changeBoxColor(tailNode->getLocation(), BLACK);
