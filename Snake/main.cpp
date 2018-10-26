@@ -15,7 +15,7 @@ int main()
 {
 
 
-	sf::RenderWindow window(sf::VideoMode(450, 550), "Snake!");
+	sf::RenderWindow window(sf::VideoMode(500, 600), "Snake!");
 	SnakeGameClass game(window);
 	QAgentClass agent(game);
 
