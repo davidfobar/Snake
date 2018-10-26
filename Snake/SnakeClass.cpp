@@ -1,19 +1,18 @@
 #include "SnakeClass.h"
+#include <iostream>
+using namespace std;
 
-SnakeClass::SnakeClass(){
-	
-}
+SnakeClass::SnakeClass(){}
 
 SnakeClass::SnakeClass(MapClass &map){
 	snakeLength = 2;
+	prevDir = UP;
 	sf::Vector2u centerOfMap = map.getCenterLocation();
 	headNode = new SnakeBodyNodeClass;
 	tailNode = new SnakeBodyNodeClass;
 	headNode->setLocation(centerOfMap);
 	map.changeBoxColor(centerOfMap, RED);
-	centerOfMap.x++;
 	tailNode->setLocation(centerOfMap);
-	map.changeBoxColor(centerOfMap, WHITE);
 	
 	headNode->setPrev(tailNode);
 	headNode->setNext(nullptr);
@@ -24,13 +23,21 @@ SnakeClass::SnakeClass(MapClass &map){
 int SnakeClass::move(MapClass &map, int dir) {
 	int moveResult = CLEAR;
 
+	if (dir == NO_CHANGE) {
+		dir = prevDir;
+	}
+	else {
+		map.updateScore(-1);
+		prevDir = dir;
+	}
+
 	sf::Vector2u headLocation = headNode->getLocation();
 	map.changeBoxColor(headLocation, WHITE);
 
-	if(dir == UP) headLocation.x--;
-	else if (dir == DOWN) headLocation.x++;
-	else if (dir == LEFT) headLocation.y--;
-	else if (dir == RIGHT) headLocation.y++;
+	if(dir == UP) headLocation.y--;
+	else if (dir == DOWN) headLocation.y++;
+	else if (dir == LEFT) headLocation.x--;
+	else if (dir == RIGHT) headLocation.x++;
 
 	SnakeBodyNodeClass *newHead = new SnakeBodyNodeClass;
 	moveResult = map.changeBoxColor(headLocation, RED);
@@ -47,7 +54,7 @@ int SnakeClass::move(MapClass &map, int dir) {
 	}
 	else if (moveResult == BLUE) {
 		moveResult = EAT_FOOD;
-		map.updateScore();
+		map.updateScore(snakeLength++);
 	}
 	else {
 		map.changeBoxColor(tailNode->getLocation(), BLACK);
@@ -60,6 +67,10 @@ int SnakeClass::move(MapClass &map, int dir) {
 	return moveResult;
 }
 
-SnakeClass::~SnakeClass()
-{
+SnakeClass::~SnakeClass(){
+	while (tailNode != nullptr) {
+		SnakeBodyNodeClass *temp = tailNode->getNext();
+		delete tailNode;
+		tailNode = temp;
+	}
 }

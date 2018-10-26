@@ -7,6 +7,7 @@ const int GAME_OVER = 99;
 const int EAT_FOOD = 10;
 const int CLEAR = 11;
 
+const int NO_CHANGE = -99;
 const int UP = 0;
 const int DOWN = 1;
 const int LEFT = 2;
@@ -16,6 +17,7 @@ class SnakeClass
 {
 private:
 	int snakeLength;
+	int prevDir;
 	SnakeBodyNodeClass* headNode;
 	SnakeBodyNodeClass* tailNode;
 	
@@ -23,7 +25,6 @@ public:
 	SnakeClass();
 	SnakeClass(MapClass &map);
 	~SnakeClass();
-
 	int move(MapClass &map, int dir);
 };
 

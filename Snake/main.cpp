@@ -1,65 +1,54 @@
-#include <SFML/Graphics.hpp>
 #include <chrono>
 #include <thread>
-#include "MapClass.h"
-#include "FoodClass.h"
-#include "SnakeClass.h"
+#include <SFML/Graphics.hpp>
+#include "SnakeGameClass.h"
+#include <iostream>
 
-const bool ENABLE_RANDOM = false;
+using namespace std;
+
+const bool AGENT_TRAINING = false;
 const float TIME_STEP_PER_ROUND = .95;
 const int INITIAL_TIME_PER_ROUND = 100; //milliseconds
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(500, 600), "Snake!");
+	sf::RenderWindow window(sf::VideoMode(400, 600), "Snake!");
+	SnakeGameClass game(window);
 
-	MapClass map(window.getSize(), ENABLE_RANDOM);
-	SnakeClass snake(map);
-	FoodClass food;
-	food.createNew(map);
-
-	while (window.isOpen())
-	{
-		static int nextMove = UP;
-		static bool inputAccepted = false;
+	while (window.isOpen())	{
+		int nextMove = NO_CHANGE;
 		static int timePerRound = INITIAL_TIME_PER_ROUND; 
 
-		sf::Event event;
-		while (window.pollEvent(event)){
-			if (event.type == sf::Event::Closed) window.close();
-			else if (event.type == sf::Event::KeyPressed && !inputAccepted) {
-				if (event.key.code == sf::Keyboard::Left && nextMove != RIGHT) {
-					nextMove = LEFT; 
-					inputAccepted = true;
-				}
-				else if (event.key.code == sf::Keyboard::Right && nextMove != LEFT) {
-					nextMove = RIGHT;
-					inputAccepted = true;
-				}
-				else if (event.key.code == sf::Keyboard::Up && nextMove != DOWN) {
-					nextMove = UP;
-					inputAccepted = true;
-				}
-				else if (event.key.code == sf::Keyboard::Down && nextMove != UP) {
-					nextMove = DOWN;
-					inputAccepted = true;
+		if (AGENT_TRAINING) {
+			game.getScore();
+			//game.getState();
+			//agent.process();
+		}
+		else {
+			sf::Event event;
+			while (window.pollEvent(event)) {
+				if (event.type == sf::Event::Closed) window.close();
+				else if (event.type == sf::Event::KeyPressed) {
+					if (event.key.code == sf::Keyboard::Left) {
+						nextMove = LEFT;
+					}
+					else if (event.key.code == sf::Keyboard::Right) {
+						nextMove = RIGHT;
+					}
+					else if (event.key.code == sf::Keyboard::Up) {
+						nextMove = UP;
+					}
+					else if (event.key.code == sf::Keyboard::Down) {
+						nextMove = DOWN;
+					}
 				}
 			}
-		}
-		int moveResult = snake.move(map, nextMove);
-		inputAccepted = false;
-		std::this_thread::sleep_for(std::chrono::milliseconds(int(timePerRound)));
 
-		if (moveResult != GAME_OVER) {
-			if (moveResult == EAT_FOOD) {
-				food.createNew(map);
-				timePerRound *= TIME_STEP_PER_ROUND;
-			}
+			game.moveSnake(nextMove);
+			this_thread::sleep_for(chrono::milliseconds(int(timePerRound)));
 		}
-		else if (moveResult == GAME_OVER) window.close();
-		
 		window.clear();
-		map.draw(window);
+		game.draw(window);
 		window.display();
 	}
 

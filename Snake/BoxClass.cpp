@@ -1,5 +1,6 @@
 #include "BoxClass.h"
-
+#include <iostream>
+using namespace std;
 
 
 BoxClass::BoxClass()  {

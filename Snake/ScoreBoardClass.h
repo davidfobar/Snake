@@ -15,7 +15,9 @@ private:
 public:
 	ScoreBoardClass();
 	~ScoreBoardClass();
-	void updateScore();
+	void updateScore(int val);
+	void reset();
 	void draw(sf::RenderWindow &window);
+	int getScore();
 };
 

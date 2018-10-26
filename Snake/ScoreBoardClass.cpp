@@ -13,8 +13,16 @@ ScoreBoardClass::ScoreBoardClass(){
 ScoreBoardClass::~ScoreBoardClass(){
 }
 
-void ScoreBoardClass::updateScore() {
-	curScore++;
+int ScoreBoardClass::getScore() {
+	return curScore;
+}
+
+void ScoreBoardClass::updateScore(int val) {
+	curScore += val;
+}
+
+void ScoreBoardClass::reset() {
+	curScore = 100;
 }
 
 void ScoreBoardClass::draw(sf::RenderWindow &window) {

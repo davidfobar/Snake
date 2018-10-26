@@ -10,10 +10,9 @@ class MapClass
 {
 private:
 	BoxClass **mapTiles;
-	int numAcross;
-	int numDown;
+	int _x;
+	int _y;
 	ScoreBoardClass scoreBoard;
-
 	void setExteriorWalls();
 public:
 	MapClass();
@@ -23,5 +22,7 @@ public:
 	sf::Vector2u getRandLocation();
 	sf::Vector2u getCenterLocation();
 	int changeBoxColor(sf::Vector2u location, int inColor);
-	void updateScore();
+	void updateScore(int val);
+	void reset();
+	int getScore();
 };
