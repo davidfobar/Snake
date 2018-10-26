@@ -3,17 +3,21 @@
 #include <SFML/Graphics.hpp>
 #include "SnakeGameClass.h"
 #include <iostream>
+#include "QAgentClass.h"
 
 using namespace std;
 
 const bool AGENT_TRAINING = false;
 const float TIME_STEP_PER_ROUND = .95;
-const int INITIAL_TIME_PER_ROUND = 100; //milliseconds
+const int INITIAL_TIME_PER_ROUND = 200; //milliseconds
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(400, 600), "Snake!");
+
+
+	sf::RenderWindow window(sf::VideoMode(450, 550), "Snake!");
 	SnakeGameClass game(window);
+	QAgentClass agent(game);
 
 	while (window.isOpen())	{
 		int nextMove = NO_CHANGE;
@@ -21,8 +25,7 @@ int main()
 
 		if (AGENT_TRAINING) {
 			game.getScore();
-			//game.getState();
-			//agent.process();
+			//agent.process(game.getState(),game.getScore());
 		}
 		else {
 			sf::Event event;

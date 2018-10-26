@@ -6,6 +6,39 @@ MapClass::MapClass() {
 	mapTiles = NULL;
 }
 
+sf::Vector2u MapClass::getSize() {
+	return sf::Vector2u(_x, _y);
+}
+
+int MapClass::getNearestPosX(sf::Vector2u loc) {
+	int count = 0;
+	while(mapTiles[loc.x++][loc.y].getColor() != WHITE) {
+		count++;
+	}
+	return count;
+}
+int MapClass::getNearestPosY(sf::Vector2u loc) {
+	int count = 0;
+	while (mapTiles[loc.x][loc.y++].getColor() != WHITE) {
+		count++;
+	}
+	return count;
+}
+int MapClass::getNearestNegX(sf::Vector2u loc) {
+	int count = 0;
+	while (mapTiles[loc.x--][loc.y].getColor() != WHITE) {
+		count++;
+	}
+	return count;
+}
+int MapClass::getNearestNegY(sf::Vector2u loc) {
+	int count = 0;
+	while (mapTiles[loc.x][loc.y--].getColor() != WHITE) {
+		count++;
+	}
+	return count;
+}
+
 int MapClass::getScore() {
 	return scoreBoard.getScore();
 }
@@ -68,7 +101,7 @@ sf::Vector2u MapClass::getRandLocation(){
 
 	while (!clearSpaceFound) {
 		x = rand() % (_x-1) + 1;
-		y = rand() % (_y-1) + 1;
+		y = rand() % (_y-2) + 1;
 
 		if (mapTiles[x][x].isNotFilled()) clearSpaceFound = true;
 	}

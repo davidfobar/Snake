@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/system/Vector2.hpp>
 
-const int BOX_SIZE = 10;
+const int BOX_SIZE = 50;
 const int BLACK = 0;
 const int WHITE = 1;
 const int BLUE = 2;

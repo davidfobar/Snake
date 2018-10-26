@@ -20,5 +20,8 @@ public:
 	void moveSnake(int nextMove);
 	void draw(sf::RenderWindow &window);
 	int getScore();
+	uint8_t* getState();
+	int getMapWidth();
+	int getMapHeight();
 };
 

@@ -26,5 +26,6 @@ public:
 	SnakeClass(MapClass &map);
 	~SnakeClass();
 	int move(MapClass &map, int dir);
+	sf::Vector2u getHeadLocation();
 };
 

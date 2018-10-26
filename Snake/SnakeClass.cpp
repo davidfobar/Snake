@@ -20,6 +20,10 @@ SnakeClass::SnakeClass(MapClass &map){
 	tailNode->setPrev(nullptr);
 }
 
+sf::Vector2u SnakeClass::getHeadLocation() {
+	return headNode->getLocation();
+}
+
 int SnakeClass::move(MapClass &map, int dir) {
 	int moveResult = CLEAR;
 

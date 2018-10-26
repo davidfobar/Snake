@@ -11,3 +11,7 @@ void FoodClass::createNew(MapClass &curMap) {
 FoodClass::~FoodClass()
 {
 }
+
+sf::Vector2u FoodClass::getLocation() {
+	return foodLoc;
+}

@@ -21,8 +21,13 @@ public:
 	void draw(sf::RenderWindow &window);
 	sf::Vector2u getRandLocation();
 	sf::Vector2u getCenterLocation();
+	sf::Vector2u getSize();
 	int changeBoxColor(sf::Vector2u location, int inColor);
 	void updateScore(int val);
 	void reset();
 	int getScore();
+	int getNearestPosX(sf::Vector2u location);
+	int getNearestPosY(sf::Vector2u location);
+	int getNearestNegX(sf::Vector2u location);
+	int getNearestNegY(sf::Vector2u location);
 };

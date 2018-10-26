@@ -9,5 +9,6 @@ public:
 	FoodClass();
 	void createNew(MapClass &curMap);
 	~FoodClass();
+	sf::Vector2u getLocation();
 };
 
