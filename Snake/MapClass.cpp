@@ -108,10 +108,10 @@ sf::Vector2u MapClass::getRandLocation(){
 	int y;
 
 	while (!clearSpaceFound) {
-		x = rand() % (_x-1) + 1;
+		x = rand() % (_x-2) + 1;
 		y = rand() % (_y-2) + 1;
 
-		if (mapTiles[x][x].isNotFilled()) clearSpaceFound = true;
+		if (mapTiles[x][y].isNotFilled()) clearSpaceFound = true;
 	}
 	randLoc.x = x;
 	randLoc.y = y;
