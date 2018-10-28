@@ -1,13 +1,7 @@
 #include "ScoreBoardClass.h"
 
 ScoreBoardClass::ScoreBoardClass(){
-	//sf::Text scoreText;
-	//sf::Font font;
-	//font.loadFromFile("arial.ttf");
 	curScore = INITIAL_SCORE;
-	//scoreText.setFillColor(sf::Color::Red);
-	//scoreText.setPosition(sf::Vector2f(0., 500.));
-	//scoreText.setCharacterSize(80);
 }
 
 ScoreBoardClass::~ScoreBoardClass(){
@@ -18,11 +12,12 @@ int ScoreBoardClass::getScore() {
 }
 
 void ScoreBoardClass::updateScore(int val) {
-	curScore += val;
+	if (val == GAME_OVER) curScore = 0;
+	else curScore += val;
 }
 
 void ScoreBoardClass::reset() {
-	curScore = 100;
+	curScore = INITIAL_SCORE;
 }
 
 void ScoreBoardClass::draw(sf::RenderWindow &window) {
@@ -37,5 +32,4 @@ void ScoreBoardClass::draw(sf::RenderWindow &window) {
 	scoreText.setCharacterSize(80); // in pixels, not points!
 	scoreText.setFillColor(sf::Color::White);
 	window.draw(scoreText);
-
 }

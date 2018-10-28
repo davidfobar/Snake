@@ -26,14 +26,7 @@ sf::Vector2u SnakeClass::getHeadLocation() {
 
 int SnakeClass::move(MapClass &map, int dir) {
 	int moveResult = CLEAR;
-
-	if (dir == NO_CHANGE) {
-		dir = prevDir;
-	}
-	else {
-		map.updateScore(-1);
-		prevDir = dir;
-	}
+	map.updateScore(MOVE_PENALTY);
 
 	sf::Vector2u headLocation = headNode->getLocation();
 	map.changeBoxColor(headLocation, WHITE);
@@ -53,12 +46,13 @@ int SnakeClass::move(MapClass &map, int dir) {
 	oldHead->setNext(newHead);
 	newHead->setNext(nullptr);
 
-	if (moveResult == WHITE) {
+	if (moveResult == WHITE || map.getScore() <= 0) {
+		map.updateScore(KILL_PENALTY);
 		moveResult = GAME_OVER;
 	}
 	else if (moveResult == BLUE) {
 		moveResult = EAT_FOOD;
-		map.updateScore(snakeLength++);
+		map.updateScore(FOOD_REWARD);
 	}
 	else {
 		map.changeBoxColor(tailNode->getLocation(), BLACK);

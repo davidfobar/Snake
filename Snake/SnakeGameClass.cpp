@@ -4,34 +4,30 @@ using namespace std;
 
 SnakeGameClass::SnakeGameClass() {}
 
-int SnakeGameClass::getScore() {
-	return map.getScore();
-}
-
-uint8_t* SnakeGameClass::getState() {
+void SnakeGameClass::getState(GameStateClass &s) {
 	sf::Vector2u headLoc = snake->getHeadLocation();
 	sf::Vector2u foodLoc = food.getLocation();
 
-	uint8_t gameState[8] = {};
+	int gameState[8] = {};
 
-	gameState[0] = map.getNearestPosX(headLoc);
-	gameState[1] = map.getNearestPosY(headLoc);
-	gameState[2] = map.getNearestNegX(headLoc);
-	gameState[3] = map.getNearestNegY(headLoc);
+	s.posx = map.getNearestPosX(headLoc);
+	s.posy = map.getNearestPosY(headLoc);
+	s.negx = map.getNearestNegX(headLoc);
+	s.negy = map.getNearestNegY(headLoc);
 
-	if (foodLoc.x > headLoc.x) gameState[4] = uint8_t(foodLoc.x - headLoc.x);
-	else gameState[4] = 0;
+	if (foodLoc.x >= headLoc.x) s.fposx = uint8_t(foodLoc.x - headLoc.x);
+	else s.fposx = 0;
 
-	if (foodLoc.y > headLoc.y) gameState[5] = uint8_t(foodLoc.y - headLoc.y);
-	else gameState[5] = 0;
+	if (foodLoc.y >= headLoc.y) s.fposy = uint8_t(foodLoc.y - headLoc.y);
+	else s.fposy = 0;
 
-	if (foodLoc.x < headLoc.x) gameState[6] = uint8_t(headLoc.x - foodLoc.x);
-	else gameState[6] = 0;
+	if (foodLoc.x < headLoc.x) s.fnegx = uint8_t(headLoc.x - foodLoc.x);
+	else s.fnegx = 0;
 
-	if (foodLoc.y < headLoc.y) gameState[7] = uint8_t(headLoc.y - foodLoc.y);
-	else gameState[7] = 0;
+	if (foodLoc.y < headLoc.y) s.fnegy = uint8_t(headLoc.y - foodLoc.y);
+	else s.fnegy = 0;
 
-	return gameState;
+	s.score = map.getScore();
 }
 
 int SnakeGameClass::getMapWidth() {
@@ -48,15 +44,18 @@ SnakeGameClass::SnakeGameClass(sf::RenderWindow &window) :
 	food.createNew(map);
 }
 
-void SnakeGameClass::moveSnake(int nextMove) {
+bool SnakeGameClass::moveSnake(int nextMove) {
+	bool gameOver = false;
 	int moveResult = snake->move(map, nextMove);
 
 	if (moveResult == GAME_OVER) {
-		reset();
+		gameOver = true;
 	}
 	else if (moveResult == EAT_FOOD) {
 		food.createNew(map);
 	}
+
+	return gameOver;
 }
 
 void SnakeGameClass::reset() {

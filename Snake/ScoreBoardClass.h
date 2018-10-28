@@ -3,9 +3,7 @@
 #include <SFML/system/Vector2.hpp>
 #include <sstream>
 #include <iostream>
-
-const int INITIAL_SCORE = 0;
-const int SCOREBOARD_HEIGHT = 100;
+#include "constants.h"
 
 class ScoreBoardClass
 {

@@ -137,6 +137,7 @@
   <ItemGroup>
     <ClCompile Include="BoxClass.cpp" />
     <ClCompile Include="FoodClass.cpp" />
+    <ClCompile Include="GameStateClass.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapClass.cpp" />
     <ClCompile Include="QAgentClass.cpp" />
@@ -146,9 +147,10 @@
     <ClCompile Include="SnakeGameClass.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BorderClass.h" />
     <ClInclude Include="BoxClass.h" />
+    <ClInclude Include="constants.h" />
     <ClInclude Include="FoodClass.h" />
+    <ClInclude Include="GameStateClass.h" />
     <ClInclude Include="MapClass.h" />
     <ClInclude Include="QAgentClass.h" />
     <ClInclude Include="ScoreBoardClass.h" />
