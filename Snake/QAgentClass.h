@@ -8,9 +8,9 @@ using namespace std;
 
 const bool AGENT_TRAINING = true;
 const bool UPDATE_SCREEN = false;
-const double LEARNING_RATE = 0.7;
+const double LEARNING_RATE = 0.9;
 const double INITIAL_DISCOUNT_FACTOR = 0.1;
-const int MAX_DIST_FOR_STATE = 5;
+const int MAX_DIST_FOR_STATE = 8;
 
 class QAgentClass
 {
@@ -19,7 +19,10 @@ class QAgentClass
 	int prevMove;
 	double learningRate;
 	double gamma;
-
+	double distToFood(GameStateClass &s);
+	void truncateState(GameStateClass &s);
+	double getQat(GameStateClass &s, int i);
+	void setQat(GameStateClass &s, int i, double val);
 public:
 	QAgentClass();
 	~QAgentClass();

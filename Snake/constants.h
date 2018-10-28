@@ -19,9 +19,10 @@ const int SCOREBOARD_HEIGHT = 100;
 const int GAME_OVER = 99;
 const int EAT_FOOD = 10;
 const int CLEAR = 11;
-const int FOOD_REWARD = 10;
+const int FOOD_REWARD = 20;
 const int MOVE_PENALTY = -1;
-const int KILL_PENALTY = -10;
+const int CHANGE_DIR_PENALTY = -1;
+const int COLLISION_PENALTY = -100;
 
 const int NO_CHANGE = -99;
 const int UP = 0;

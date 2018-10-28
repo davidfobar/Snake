@@ -26,8 +26,14 @@ sf::Vector2u SnakeClass::getHeadLocation() {
 
 int SnakeClass::move(MapClass &map, int dir) {
 	int moveResult = CLEAR;
-	map.updateScore(MOVE_PENALTY);
-
+	if (dir == prevDir) {
+		map.updateScore(MOVE_PENALTY);
+	}
+	else {
+		map.updateScore(CHANGE_DIR_PENALTY);
+		prevDir = dir;
+	}
+	
 	sf::Vector2u headLocation = headNode->getLocation();
 	map.changeBoxColor(headLocation, WHITE);
 
@@ -46,8 +52,11 @@ int SnakeClass::move(MapClass &map, int dir) {
 	oldHead->setNext(newHead);
 	newHead->setNext(nullptr);
 
-	if (moveResult == WHITE || map.getScore() <= 0) {
-		map.updateScore(KILL_PENALTY);
+	if (moveResult == WHITE) {
+		map.updateScore(COLLISION_PENALTY);
+		moveResult = GAME_OVER;
+	}
+	else if (map.getScore() <= 0) {
 		moveResult = GAME_OVER;
 	}
 	else if (moveResult == BLUE) {

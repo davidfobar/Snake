@@ -1,24 +1,16 @@
 #include "QAgentClass.h"
 
 int QAgentClass::getMove(GameStateClass &s) {
-	
-	if (s.posx >= MAX_DIST_FOR_STATE) s.posx = MAX_DIST_FOR_STATE-1;
-	if (s.posy >= MAX_DIST_FOR_STATE) s.posy = MAX_DIST_FOR_STATE-1;
-	if (s.negx >= MAX_DIST_FOR_STATE) s.negx = MAX_DIST_FOR_STATE-1;
-	if (s.negy >= MAX_DIST_FOR_STATE) s.negy = MAX_DIST_FOR_STATE-1;
-	if (s.fposx >= MAX_DIST_FOR_STATE) s.fposx = MAX_DIST_FOR_STATE - 1;
-	if (s.fposy >= MAX_DIST_FOR_STATE) s.fposy = MAX_DIST_FOR_STATE - 1;
-	if (s.fnegx >= MAX_DIST_FOR_STATE) s.fnegx = MAX_DIST_FOR_STATE - 1;
-	if (s.fnegy >= MAX_DIST_FOR_STATE) s.fnegy = MAX_DIST_FOR_STATE - 1;
-
 	//the previous state is now equal to the current state
 	pS = s;
+	
+	truncateState(s);
 
-	double maxQ = QValue[s.posx][s.posy][s.negx][s.negy][s.fposx][s.fposy][s.fnegx][s.fnegy][0];
+	double maxQ = getQat(s,0);
 	int move = 0;
 	for (int i = 1; i < 4; i++) {
-		if (QValue[s.posx][s.posy][s.negx][s.negy][s.fposx][s.fposy][s.fnegx][s.fnegy][i] > maxQ) {
-			maxQ = QValue[s.posx][s.posy][s.negx][s.negy][s.fposx][s.fnegy][s.fnegx][s.fnegy][i];
+		if (getQat(s,i) > maxQ) {
+			maxQ = getQat(s, i);
 			move = i;
 		}
 	}
@@ -32,7 +24,36 @@ void QAgentClass::changeDiscountFactor(double val) {
 }
 
 void QAgentClass::updateMatrix(GameStateClass &s) {
+	double reward = double(s.score - pS.score) + 0.5*(distToFood(pS) - distToFood(s));
 
+	truncateState(s);
+	truncateState(pS);
+	
+	double maxQ = getQat(s, 0);
+	for (int i = 1; i < 4; i++) {
+		if (getQat(s, i) > maxQ) {
+			maxQ = getQat(s, i);
+		}
+	}
+
+	double prevQ = getQat(pS, prevMove);
+	double newQ = (1 - learningRate) * prevQ + learningRate * (reward + gamma * maxQ);
+	setQat(pS, prevMove, newQ);
+}
+
+double QAgentClass::getQat(GameStateClass &s, int i) {
+	return QValue[s.posx][s.posy][s.negx][s.negy][s.fposx][s.fposy][s.fnegx][s.fnegy][i];
+}
+
+void QAgentClass::setQat(GameStateClass &s, int i, double val) {
+	QValue[s.posx][s.posy][s.negx][s.negy][s.fposx][s.fposy][s.fnegx][s.fnegy][i] = val;
+}
+
+double QAgentClass::distToFood(GameStateClass &s) {
+	return sqrt((s.fposx + s.fnegx)*(s.fposx + s.fnegx) + (s.fposy + s.fnegy)*(s.fposy + s.fnegy));
+}
+
+void QAgentClass::truncateState(GameStateClass &s) {
 	if (s.posx >= MAX_DIST_FOR_STATE) s.posx = MAX_DIST_FOR_STATE - 1;
 	if (s.posy >= MAX_DIST_FOR_STATE) s.posy = MAX_DIST_FOR_STATE - 1;
 	if (s.negx >= MAX_DIST_FOR_STATE) s.negx = MAX_DIST_FOR_STATE - 1;
@@ -41,20 +62,6 @@ void QAgentClass::updateMatrix(GameStateClass &s) {
 	if (s.fposy >= MAX_DIST_FOR_STATE) s.fposy = MAX_DIST_FOR_STATE - 1;
 	if (s.fnegx >= MAX_DIST_FOR_STATE) s.fnegx = MAX_DIST_FOR_STATE - 1;
 	if (s.fnegy >= MAX_DIST_FOR_STATE) s.fnegy = MAX_DIST_FOR_STATE - 1;
-	
-	double maxQ = QValue[s.posx][s.posy][s.negx][s.negy][s.fposx][s.fposy][s.fnegx][s.fnegy][0];
-	double oldQ = QValue[pS.posx][pS.posy][pS.negx][pS.negy][pS.fposx][pS.fposy][pS.fnegx][pS.fnegy][prevMove];
-
-	for (int i = 1; i < 4; i++) {
-		if (QValue[s.posx][s.posy][s.negx][s.negy][s.fposx][s.fposy][s.fnegx][s.fnegy][i] > maxQ) {
-			maxQ = QValue[s.posx][s.posy][s.negx][s.negy][s.fposx][s.fposy][s.fnegx][s.fnegy][i];
-		}
-	}
-	
-	double prevQ = QValue[pS.posx][pS.posy][pS.negx][pS.negy][pS.fposx][pS.fposy][pS.fnegx][pS.fnegy][prevMove];
-	QValue[pS.posx][pS.posy][pS.negx][pS.negy][pS.fposx][pS.fposy][pS.fnegx][pS.fnegy][prevMove] =
-		//prevQ + learningRate * (double(s.score - pS.score) + gamma * maxQ - prevQ);
-		(1 - learningRate) * prevQ + learningRate * (double(s.score - pS.score) + gamma * maxQ);
 }
 
 void QAgentClass::reset() {
@@ -95,7 +102,7 @@ QAgentClass::QAgentClass() {
 									QValue[posX][posY][negX][negY][fPosX][fPosY][fNegX][fNegY] = new double[4];
 									
 									for (int i = 0; i < 4; i++) {
-										QValue[posX][posY][negX][negY][fPosX][fPosY][fNegX][fNegY][i] = 0;// random();
+										QValue[posX][posY][negX][negY][fPosX][fPosY][fNegX][fNegY][i] = 0;
 									}
 								}
 							}

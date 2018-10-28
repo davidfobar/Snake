@@ -54,7 +54,7 @@ int main(){
 		if (snakeKilled) {
 			gameCount++;
 			cout << "Game " << gameCount << " ended: " << gameState.score << endl;
-			if (gameState.score > 200 || gameCount > 10000) updateScreen = true;
+			if (gameCount > 1000000) updateScreen = true;
 		}
 
 		if(updateScreen){
@@ -66,6 +66,7 @@ int main(){
 
 		if (AGENT_TRAINING) {
 			agent.updateMatrix(gameState);
+			//if (gameCount < 3000) agent.changeDiscountFactor((1.0-1.0/gameCount)*.3);
 		}
 
 		if (snakeKilled) {
