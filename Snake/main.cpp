@@ -16,7 +16,7 @@ int main(){
 	GameStateClass gameState;
 
 	int gameCount = 0;
-	bool updateScreen = false;
+	bool updateScreen = true;
 
 	while (window.isOpen())	{
 		int nextMove = NO_CHANGE;
@@ -57,7 +57,7 @@ int main(){
 		if (snakeKilled) {
 			gameCount++;
 			cout << "Game " << gameCount << " ended: " << gameState.score << endl;
-			if (gameCount > 100000) updateScreen = true;
+			if (gameCount > 30000) updateScreen = true;
 		}
 		
 		if(updateScreen){
@@ -69,8 +69,10 @@ int main(){
 
 		if (AGENT_TRAINING) {
 			agent.updateMatrix(gameState);
-			if (gameCount > 25000) {
-				double newDiscountFactor = (1.0 - 1.0 / (gameCount - 25000))*(MAX_DISCOUNT_FACTOR - INITIAL_DISCOUNT_FACTOR) + INITIAL_DISCOUNT_FACTOR;
+			if (gameCount > INITIAL_TRAINING) {
+				//double newDiscountFactor = (1.0 - 1.0 / (gameCount - 25000))*(MAX_DISCOUNT_FACTOR - INITIAL_DISCOUNT_FACTOR) + INITIAL_DISCOUNT_FACTOR;
+				double newDiscountFactor = INITIAL_DISCOUNT_FACTOR + 
+					(gameCount - INITIAL_TRAINING)*(MAX_DISCOUNT_FACTOR - INITIAL_DISCOUNT_FACTOR) / (TRAINING_GAMES - gameCount);
 				agent.changeDiscountFactor(newDiscountFactor);
 			}
 		}

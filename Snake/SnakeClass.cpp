@@ -26,8 +26,9 @@ sf::Vector2u SnakeClass::getHeadLocation() {
 
 int SnakeClass::move(MapClass &map, int dir) {
 	int moveResult = CLEAR;
+	map.updateScore(MOVE_PENALTY);
 	if (dir == prevDir) {
-		map.updateScore(MOVE_PENALTY);
+		//map.updateScore(MOVE_PENALTY);
 	}
 	else {
 		map.updateScore(CHANGE_DIR_PENALTY);
