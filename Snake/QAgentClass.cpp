@@ -20,11 +20,13 @@ int QAgentClass::getMove(GameStateClass &s) {
 }
 
 void QAgentClass::changeDiscountFactor(double val) {
+	if (val < 0) val = 0;
+	if (val > 1) val = 1;
 	gamma = val;
 }
 
 void QAgentClass::updateMatrix(GameStateClass &s) {
-	double reward = double(s.score - pS.score) + 0.5*(distToFood(pS) - distToFood(s));
+	double reward = double(s.score - pS.score) + DISTANCE_REWARD_FACTOR *(distToFood(pS) - distToFood(s));
 
 	truncateState(s);
 	truncateState(pS);
@@ -58,10 +60,10 @@ void QAgentClass::truncateState(GameStateClass &s) {
 	if (s.posy >= MAX_DIST_FOR_STATE) s.posy = MAX_DIST_FOR_STATE - 1;
 	if (s.negx >= MAX_DIST_FOR_STATE) s.negx = MAX_DIST_FOR_STATE - 1;
 	if (s.negy >= MAX_DIST_FOR_STATE) s.negy = MAX_DIST_FOR_STATE - 1;
-	if (s.fposx >= MAX_DIST_FOR_STATE) s.fposx = MAX_DIST_FOR_STATE - 1;
-	if (s.fposy >= MAX_DIST_FOR_STATE) s.fposy = MAX_DIST_FOR_STATE - 1;
-	if (s.fnegx >= MAX_DIST_FOR_STATE) s.fnegx = MAX_DIST_FOR_STATE - 1;
-	if (s.fnegy >= MAX_DIST_FOR_STATE) s.fnegy = MAX_DIST_FOR_STATE - 1;
+	if (s.fposx >= MAX_DIST_FOR_FOOD) s.fposx = MAX_DIST_FOR_FOOD - 1;
+	if (s.fposy >= MAX_DIST_FOR_FOOD) s.fposy = MAX_DIST_FOR_FOOD - 1;
+	if (s.fnegx >= MAX_DIST_FOR_FOOD) s.fnegx = MAX_DIST_FOR_FOOD - 1;
+	if (s.fnegy >= MAX_DIST_FOR_FOOD) s.fnegy = MAX_DIST_FOR_FOOD - 1;
 }
 
 void QAgentClass::reset() {
@@ -75,6 +77,8 @@ QAgentClass::QAgentClass() {
 
 	int x = MAX_DIST_FOR_STATE;
 	int y = MAX_DIST_FOR_STATE;
+	int fx = MAX_DIST_FOR_FOOD;
+	int fy = MAX_DIST_FOR_FOOD;
 	
 	QValue = new double********[x];
 	for (int posX = 0; posX < x; posX++) {
@@ -87,18 +91,18 @@ QAgentClass::QAgentClass() {
 				QValue[posX][posY][negX] = new double *****[y];
 				
 				for (int negY = 0; negY < y; negY++) {
-					QValue[posX][posY][negX][negY] = new double ****[x];
+					QValue[posX][posY][negX][negY] = new double ****[fx];
 					
-					for (int fPosX = 0; fPosX < x; fPosX++) {
-						QValue[posX][posY][negX][negY][fPosX] = new double ***[y];
+					for (int fPosX = 0; fPosX < fx; fPosX++) {
+						QValue[posX][posY][negX][negY][fPosX] = new double ***[fy];
 						
-						for (int fPosY = 0; fPosY < y; fPosY++) {
-							QValue[posX][posY][negX][negY][fPosX][fPosY] = new double **[x];
+						for (int fPosY = 0; fPosY < fy; fPosY++) {
+							QValue[posX][posY][negX][negY][fPosX][fPosY] = new double **[fx];
 							
-							for (int fNegX = 0; fNegX < x; fNegX++) {
-								QValue[posX][posY][negX][negY][fPosX][fPosY][fNegX] = new double *[y];
+							for (int fNegX = 0; fNegX < fx; fNegX++) {
+								QValue[posX][posY][negX][negY][fPosX][fPosY][fNegX] = new double *[fy];
 								
-								for (int fNegY = 0; fNegY < y; fNegY++) {
+								for (int fNegY = 0; fNegY < fy; fNegY++) {
 									QValue[posX][posY][negX][negY][fPosX][fPosY][fNegX][fNegY] = new double[4];
 									
 									for (int i = 0; i < 4; i++) {

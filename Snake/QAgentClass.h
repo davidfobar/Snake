@@ -9,8 +9,11 @@ using namespace std;
 const bool AGENT_TRAINING = true;
 const bool UPDATE_SCREEN = false;
 const double LEARNING_RATE = 0.9;
-const double INITIAL_DISCOUNT_FACTOR = 0.1;
+const double INITIAL_DISCOUNT_FACTOR = 0.3;
+const double MAX_DISCOUNT_FACTOR = 0.6;
 const int MAX_DIST_FOR_STATE = 8;
+const int MAX_DIST_FOR_FOOD = 4;
+const double DISTANCE_REWARD_FACTOR = 0.1;
 
 class QAgentClass
 {
