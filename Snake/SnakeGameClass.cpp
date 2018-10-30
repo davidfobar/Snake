@@ -5,7 +5,7 @@ using namespace std;
 SnakeGameClass::SnakeGameClass() {}
 
 void SnakeGameClass::getState(GameStateClass &s) {
-	s.updateState( map.getFullMapState() );
+	s.updateState( map.getFullMapState(), map.getScore() );
 }
 
 int SnakeGameClass::getMapWidth() {

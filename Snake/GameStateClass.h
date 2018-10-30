@@ -11,6 +11,8 @@ public:
 	GameStateClass();
 	~GameStateClass();
 	int getStateSize();
-	void updateState(vector<double> in);
+	void updateState(vector<double> inMap, int curScore);
+	vector<double> getState();
+	int getScore();
 };
 

@@ -9,8 +9,17 @@ int GameStateClass::getStateSize() {
 	return mapState.size();
 }
 
-void GameStateClass::updateState(vector<double> in) {
-	mapState = in;
+int GameStateClass::getScore() {
+	return score;
+}
+
+void GameStateClass::updateState(vector<double> inMap, int curScore) {
+	mapState = inMap;
+	score = curScore;
+}
+
+vector<double> GameStateClass::getState() {
+	return mapState;
 }
 
 GameStateClass::~GameStateClass(){
