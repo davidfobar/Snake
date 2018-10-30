@@ -64,18 +64,27 @@ void NNClass::setLearningRate(double in) {
 	learningRate = in;
 }
 
+NNClass::NNClass(int numInputNodes, int inputNodeType, int numOutputNodes, int outputNodeType) {
+	//dJdB, dJdW, hLayer, weight, bias, dJdBc, dJdWc;
+	weight.push_back(MatrixClass<double>(numInputNodes, numOutputNodes))
+}
+
+void NNClass::addHiddenLayer(int numNodes, int nodeType) {
+	
+}
+
 NNClass::NNClass(int layers, int *nodesInLayer) {
-		numWeights = layers - 1;
+	numWeights = layers - 1;
 	numBiases = layers - 1;
 	numHiddenLayers = layers - 2;
 	numOutputs = nodesInLayer[layers];
-	weight	= new MatrixClass<double>[numWeights];
-	dJdWc	= new MatrixClass<double>[numWeights];
-	dJdW	= new MatrixClass<double>[numWeights];
-	bias	= new MatrixClass<double>[numBiases];
-	dJdBc	= new MatrixClass<double>[numBiases];
-	dJdB	= new MatrixClass<double>[numBiases];
-	hLayer	= new MatrixClass<double>[numHiddenLayers];
+	//weight	= new MatrixClass<double>[numWeights];
+	//dJdWc	= new MatrixClass<double>[numWeights];
+	//dJdW	= new MatrixClass<double>[numWeights];
+	//bias	= new MatrixClass<double>[numBiases];
+	//dJdBc	= new MatrixClass<double>[numBiases];
+	//dJdB	= new MatrixClass<double>[numBiases];
+	//hLayer	= new MatrixClass<double>[numHiddenLayers];
 
 	for (int i = 0; i < numWeights; i++) {
 		weight[i] = MatrixClass<double>(nodesInLayer[i], nodesInLayer[i+1]);
@@ -112,6 +121,16 @@ double sigmoid(double x) {
 
 double sigmoidPrime(double x) {
 	return sigmoid(x)*(1 - sigmoid(x));
+}
+
+double relu(double x) {
+	if (x > 0) return x;
+	else return 0;
+}
+
+double reluPrime(double x) {
+	if (x > 0) return 1;
+	else return 0;
 }
 
 NNClass::~NNClass(){}
