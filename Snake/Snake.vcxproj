@@ -140,6 +140,8 @@
     <ClCompile Include="GameStateClass.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapClass.cpp" />
+    <ClCompile Include="MatrixClass.cpp" />
+    <ClCompile Include="NNClass.cpp" />
     <ClCompile Include="QAgentClass.cpp" />
     <ClCompile Include="ScoreBoardClass.cpp" />
     <ClCompile Include="SnakeBodyNodeClass.cpp" />
@@ -152,6 +154,8 @@
     <ClInclude Include="FoodClass.h" />
     <ClInclude Include="GameStateClass.h" />
     <ClInclude Include="MapClass.h" />
+    <ClInclude Include="MatrixClass.h" />
+    <ClInclude Include="NNClass.h" />
     <ClInclude Include="QAgentClass.h" />
     <ClInclude Include="ScoreBoardClass.h" />
     <ClInclude Include="SnakeBodyNodeClass.h" />
