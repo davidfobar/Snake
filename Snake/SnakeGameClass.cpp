@@ -5,29 +5,7 @@ using namespace std;
 SnakeGameClass::SnakeGameClass() {}
 
 void SnakeGameClass::getState(GameStateClass &s) {
-	sf::Vector2u headLoc = snake->getHeadLocation();
-	sf::Vector2u foodLoc = food.getLocation();
-
-	int gameState[8] = {};
-
-	s.posx = map.getNearestPosX(headLoc);
-	s.posy = map.getNearestPosY(headLoc);
-	s.negx = map.getNearestNegX(headLoc);
-	s.negy = map.getNearestNegY(headLoc);
-
-	if (foodLoc.x >= headLoc.x) s.fposx = uint8_t(foodLoc.x - headLoc.x);
-	else s.fposx = 0;
-
-	if (foodLoc.y >= headLoc.y) s.fposy = uint8_t(foodLoc.y - headLoc.y);
-	else s.fposy = 0;
-
-	if (foodLoc.x < headLoc.x) s.fnegx = uint8_t(headLoc.x - foodLoc.x);
-	else s.fnegx = 0;
-
-	if (foodLoc.y < headLoc.y) s.fnegy = uint8_t(headLoc.y - foodLoc.y);
-	else s.fnegy = 0;
-
-	s.score = map.getScore();
+	s.updateState( map.getFullMapState() );
 }
 
 int SnakeGameClass::getMapWidth() {

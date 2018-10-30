@@ -39,13 +39,7 @@
     <ClCompile Include="SnakeGameClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QAgentClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GameStateClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MatrixClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NNClass.cpp">
@@ -74,9 +68,6 @@
     <ClInclude Include="SnakeGameClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="QAgentClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameStateClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -92,5 +83,10 @@
   </ItemGroup>
   <ItemGroup>
     <Font Include="arial.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MatrixClass.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

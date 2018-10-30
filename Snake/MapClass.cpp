@@ -10,41 +10,14 @@ sf::Vector2u MapClass::getSize() {
 	return sf::Vector2u(_x, _y);
 }
 
-int MapClass::getNearestPosX(sf::Vector2u loc) {
-	int count = 0;
-	while(mapTiles[loc.x][loc.y].getColor() != WHITE) {
-		if (loc.x == _x-1) break;
-		count++;
-		loc.x++;
+vector<double> MapClass::getFullMapState() {
+	vector<double> temp;
+	for (int i = 0; i < _x; i++) {
+		for (int j = 0; j < _y; j++) {
+			temp.push_back(double(mapTiles[i][j].getColor()));
+		}
 	}
-	return count;
-}
-int MapClass::getNearestPosY(sf::Vector2u loc) {
-	int count = 0;
-	while (mapTiles[loc.x][loc.y].getColor() != WHITE) {
-		if (loc.y == _y-1) break;
-		count++;
-		loc.y++;
-	}
-	return count;
-}
-int MapClass::getNearestNegX(sf::Vector2u loc) {
-	int count = 0;
-	while (mapTiles[loc.x][loc.y].getColor() != WHITE) {
-		if (loc.x == 0) break;
-		count++;
-		loc.x--;
-	}
-	return count;
-}
-int MapClass::getNearestNegY(sf::Vector2u loc) {
-	int count = 0;
-	while (mapTiles[loc.x][loc.y].getColor() != WHITE) {
-		if (loc.y == 0) break;
-		count++;
-		loc.y--;
-	}
-	return count;
+	return temp;
 }
 
 int MapClass::getScore() {

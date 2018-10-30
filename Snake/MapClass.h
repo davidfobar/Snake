@@ -5,6 +5,8 @@
 #include <ctime>
 #include "BoxClass.h"
 #include "ScoreBoardClass.h"
+#include "GameStateClass.h"
+#include <vector>
 
 class MapClass{
 private:
@@ -25,8 +27,5 @@ public:
 	void updateScore(int val);
 	void reset();
 	int getScore();
-	int getNearestPosX(sf::Vector2u location);
-	int getNearestPosY(sf::Vector2u location);
-	int getNearestNegX(sf::Vector2u location);
-	int getNearestNegY(sf::Vector2u location);
+	vector<double> getFullMapState();
 };
