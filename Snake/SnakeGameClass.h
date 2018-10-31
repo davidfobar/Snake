@@ -18,7 +18,7 @@ public:
 	~SnakeGameClass();
 	bool moveSnake(int nextMove);
 	void draw(sf::RenderWindow &window);
-	void getState(GameStateClass &s);
+	GameStateClass getState();
 	int getMapWidth();
 	int getMapHeight();
 };

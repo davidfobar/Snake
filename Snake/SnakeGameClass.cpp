@@ -4,8 +4,10 @@ using namespace std;
 
 SnakeGameClass::SnakeGameClass() {}
 
-void SnakeGameClass::getState(GameStateClass &s) {
-	s.updateState( map.getFullMapState(), map.getScore() );
+GameStateClass SnakeGameClass::getState() {
+	GameStateClass s;
+	s.updateState(map.getFullMapState(), map.getScore());
+	return s;
 }
 
 int SnakeGameClass::getMapWidth() {
@@ -17,7 +19,7 @@ int SnakeGameClass::getMapHeight() {
 }
 
 SnakeGameClass::SnakeGameClass(sf::RenderWindow &window) : 
-	map(window.getSize(), ENABLE_RANDOM){
+	map(window.getSize()){
 	snake = new SnakeClass(map);
 	food.createNew(map);
 }

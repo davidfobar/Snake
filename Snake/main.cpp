@@ -9,27 +9,37 @@
 
 using namespace std;
 
+const double LEARNING_RATE = 0.001;
+const bool AGENT_PLAYING = true;
+const bool AGENT_TRAINING = false;
+const bool ENABLE_RANDOM = true;
+
 int main(){
+	if (ENABLE_RANDOM) srand(time(0));
+	else srand(1);
+
 	sf::RenderWindow window(sf::VideoMode(450, 550), "Snake!");
 	SnakeGameClass game(window);
-	GameStateClass gameState;
+	GameStateClass curState;
 
-	game.getState(gameState);
+	curState = game.getState();
 
-	NNClass agent(gameState.getStateSize(),SIGMOID,4,SIGMOID);
+	NNClass agent(curState.getStateSize(), RELU, NUM_COMMANDS, SIGMOID);
+	agent.addHiddenLayer(20, RELU);
 	agent.setLearningRate(LEARNING_RATE);
+	agent.init();
 
 	int gameCount = 0;
 	bool updateScreen = true;
 
 	while (window.isOpen())	{
 		int nextMove = NO_CHANGE;
+		static int lastMoveNumber = 0;
 		static int timePerRound = INITIAL_TIME_PER_ROUND; 
 
-		if (false) {}
 		if (AGENT_PLAYING) {
-			game.getState(gameState);
-			nextMove = agent.compute( gameState.getState() );
+			curState = game.getState();
+			nextMove = agent.compute(curState, AGENT_TRAINING);
 		}
 		else {
 			sf::Event event;
@@ -53,9 +63,10 @@ int main(){
 		}
 
 		bool snakeKilled = game.moveSnake(nextMove);
-
-		if (AGENT_TRAINING) {
-			game.getState(gameState);
+		curState = game.getState();
+		
+		if (snakeKilled && AGENT_TRAINING) {
+			agent.PGtrain();
 		}
 
 		//Only show the first 20 games of training
@@ -63,7 +74,7 @@ int main(){
 
 		if (snakeKilled) {
 			gameCount++;
-			cout << "Game " << gameCount << " ended: " << gameState.getScore() << endl;
+			cout << "Game " << gameCount << " ended: " << curState.getScore() << endl;
 			if (gameCount > 30000) updateScreen = true;
 		}
 		
@@ -72,10 +83,6 @@ int main(){
 			window.clear();
 			game.draw(window);
 			window.display();
-		}
-
-		if (AGENT_TRAINING) {
-			
 		}
 
 		if (snakeKilled) {

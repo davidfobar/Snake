@@ -3,9 +3,6 @@
 const float TIME_STEP_PER_ROUND = .95;
 const int INITIAL_TIME_PER_ROUND = 50; //milliseconds
 
-//food spawn
-const bool ENABLE_RANDOM = false;
-
 //for box class
 const int BOX_SIZE = 25;
 const int BLACK = 0;
@@ -29,4 +26,5 @@ const int UP = 0;
 const int DOWN = 1;
 const int LEFT = 2;
 const int RIGHT = 3;
+const int NUM_COMMANDS = 4;
 

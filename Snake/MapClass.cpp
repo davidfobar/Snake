@@ -24,8 +24,7 @@ int MapClass::getScore() {
 	return scoreBoard.getScore();
 }
 
-MapClass::MapClass(sf::Vector2u windowSize, bool random) : scoreBoard() {
-	if(random)std::srand(std::time(0));
+MapClass::MapClass(sf::Vector2u windowSize) : scoreBoard() {
 	mapTiles = NULL;
 	_x = (windowSize.x / BOX_SIZE);
 	_y = ((windowSize.y - SCOREBOARD_HEIGHT) / BOX_SIZE);

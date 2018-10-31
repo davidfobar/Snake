@@ -1,14 +1,42 @@
 #include "NNClass.h"
 
-int NNClass::compute(vector<double> input) {
-	nodeLayer[0] = MatrixClass<double>({ input });
+int NNClass::compute(GameStateClass &curState, bool agentIsTrainging = false) {
+
+	nodeLayer[0] = MatrixClass<double>({ curState.getState() });
 	
 	for (int i = 1; i < numLayers; i++) {
 		nodeLayer[i] = ((nodeLayer[i-1].dot(weight[i-1]) + bias[i-1]).applyFunction(activationType[i-1]));
 	}
 
+	if (agentIsTrainging) {
+	}
+	int move = nodeLayer[numLayers - 1].getGreatest1DIndex();
+
+	prevStates.push_back(gameState);
+	prevMoves.push_back(move);
+
 	//return the output node index with the highest activation
-	return nodeLayer[numLayers-1].getGreatest1DIndex();
+	return move;
+}
+
+void NNClass::PGtrain() {
+	if (curEpisodeNum < miniBatchSize) {
+		curEpisodeNum++;
+		
+	}
+	else {
+		//conduct the policy gradient training.
+
+
+
+
+
+
+
+		curEpisodeNum = 0;
+		prevStates.clear();
+		prevMoves.clear();
+	}
 }
 
 void NNClass::backPropogate(vector<double> expectedOutput) {
@@ -69,7 +97,13 @@ void NNClass::enableMomentum(double in) {
 
 NNClass::NNClass(int numInputNodes, int inputNodeType, int numOutputNodes, int outputNodeType) {
 	momentumFactor = 0;
+	curEpisodeNum = 0;
 	learningRate = DEFAULT_LEARNING_RATE;
+	miniBatchSize = DEFAULT_MINIBATCH_SIZE;
+	discountFactor = DEFAULT_DISCOUNT_FACTOR;
+
+	prevStates.push_back(vector< GameStateClass >());
+	prevMoves.push_back(vector<int>());
 
 	nodesInLayer.push_back(numInputNodes);
 	if (inputNodeType == SIGMOID) {

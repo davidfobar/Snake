@@ -17,7 +17,7 @@ private:
 	void setExteriorWalls();
 public:
 	MapClass();
-	MapClass(sf::Vector2u windowSize, bool random);
+	MapClass(sf::Vector2u windowSize);
 	~MapClass();
 	void draw(sf::RenderWindow &window);
 	sf::Vector2u getRandLocation();
