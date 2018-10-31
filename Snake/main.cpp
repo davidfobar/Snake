@@ -16,9 +16,7 @@ int main(){
 
 	game.getState(gameState);
 
-	int numberLayers = 3;
-	int nodesPerLayer[] = {gameState.getStateSize(), 300 , 4};
-	NNClass agent(numberLayers, nodesPerLayer);
+	NNClass agent(gameState.getStateSize(),SIGMOID,4,SIGMOID);
 	agent.setLearningRate(LEARNING_RATE);
 
 	int gameCount = 0;
@@ -29,7 +27,7 @@ int main(){
 		static int timePerRound = INITIAL_TIME_PER_ROUND; 
 
 		if (false) {}
-		if (AGENT_TRAINING) {
+		if (AGENT_PLAYING) {
 			game.getState(gameState);
 			nextMove = agent.compute( gameState.getState() );
 		}
