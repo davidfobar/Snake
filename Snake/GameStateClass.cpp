@@ -13,9 +13,11 @@ int GameStateClass::getScore() {
 	return score;
 }
 
-void GameStateClass::updateState(vector<double> inMap, int curScore) {
+void GameStateClass::updateState(vector<double> inMap, int curScore, int moves, double dist) {
 	mapState = inMap;
 	score = curScore;
+	numMoves = moves;
+	foodHeadDist = dist;
 }
 
 vector<double> GameStateClass::getState() {

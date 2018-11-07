@@ -7,12 +7,11 @@
 
 using namespace std;
 
-template<class T>
 class MatrixClass {
 public:
 	MatrixClass();
 	MatrixClass(int height, int width);
-	MatrixClass( vector< vector<T> > const &array);
+	MatrixClass( vector< vector<double> > const &array);
 
 	MatrixClass times		(double const &value); // scalar multiplication
 	MatrixClass times		(MatrixClass const &m) const; // hadamard product
@@ -21,8 +20,10 @@ public:
 	MatrixClass dot			(MatrixClass const &m) const; // dot product
 	MatrixClass transpose	() const; // transposed matrix
 	MatrixClass applyFunction(double(*function)(double)) const; // to apply a function to every element of the matrix
-
+	vector<double> getSoftmax() const;
 	int getGreatest1DIndex() const;
+	int getStochasticOutput() const;
+	void isolateNode(int node);
 	void print(std::ostream &flux) const; // pretty print of the matrix
 	void clear();
 
@@ -34,12 +35,9 @@ public:
 	int getHeight() { return height; }
 	int getWidth() { return width; }
 private:
-	std::vector< vector<T> > array;
+	vector< vector<double> > array;
 	int height;
 	int width;
 };
 
-template <class T>
-ostream& operator<<(ostream &flux, MatrixClass<T> const &m);
-
-#include "MatrixClass.inl"
+ostream& operator<<(ostream &flux, MatrixClass const &m);

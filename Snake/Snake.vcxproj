@@ -140,7 +140,9 @@
     <ClCompile Include="GameStateClass.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapClass.cpp" />
+    <ClCompile Include="MatrixClass.cpp" />
     <ClCompile Include="NNClass.cpp" />
+    <ClCompile Include="NN_TrainerClass.cpp" />
     <ClCompile Include="ScoreBoardClass.cpp" />
     <ClCompile Include="SnakeBodyNodeClass.cpp" />
     <ClCompile Include="SnakeClass.cpp" />
@@ -154,6 +156,7 @@
     <ClInclude Include="MapClass.h" />
     <ClInclude Include="MatrixClass.h" />
     <ClInclude Include="NNClass.h" />
+    <ClInclude Include="NN_TrainerClass.h" />
     <ClInclude Include="ScoreBoardClass.h" />
     <ClInclude Include="SnakeBodyNodeClass.h" />
     <ClInclude Include="SnakeClass.h" />
@@ -161,9 +164,6 @@
   </ItemGroup>
   <ItemGroup>
     <Font Include="arial.ttf" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="MatrixClass.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

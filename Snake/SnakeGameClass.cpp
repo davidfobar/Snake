@@ -6,7 +6,9 @@ SnakeGameClass::SnakeGameClass() {}
 
 GameStateClass SnakeGameClass::getState() {
 	GameStateClass s;
-	s.updateState(map.getFullMapState(), map.getScore());
+	double foodHeadDist = sqrt((snake->getHeadLocation().x - food.getLocation().x)*(snake->getHeadLocation().x - food.getLocation().x)
+		+ (snake->getHeadLocation().y - food.getLocation().y)*(snake->getHeadLocation().y - food.getLocation().y));
+	s.updateState(map.getFullMapState(), map.getScore(), numMoves, foodHeadDist);
 	return s;
 }
 
@@ -18,14 +20,13 @@ int SnakeGameClass::getMapHeight() {
 	return map.getSize().y;
 }
 
-SnakeGameClass::SnakeGameClass(sf::RenderWindow &window) : 
-	map(window.getSize()){
-	snake = new SnakeClass(map);
-	food.createNew(map);
+SnakeGameClass::SnakeGameClass(sf::RenderWindow &window) : 	map(window.getSize()){
+	reset();
 }
 
 bool SnakeGameClass::moveSnake(int nextMove) {
 	bool gameOver = false;
+	numMoves++;
 	int moveResult = snake->move(map, nextMove);
 
 	if (moveResult == GAME_OVER) {
@@ -43,6 +44,7 @@ void SnakeGameClass::reset() {
 	delete snake;
 	snake = new SnakeClass(map);
 	food.createNew(map);
+	numMoves = 0;
 }
 
 void SnakeGameClass::draw(sf::RenderWindow &window) {

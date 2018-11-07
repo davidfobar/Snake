@@ -11,6 +11,7 @@ private:
 	MapClass map;
 	SnakeClass *snake;
 	FoodClass food;
+	int numMoves;
 public:
 	void reset();
 	SnakeGameClass();

@@ -1,9 +1,9 @@
+#include "MatrixClass.h"
 
-template<class T>
-MatrixClass<T>::MatrixClass() {}
+MatrixClass::MatrixClass() {}
 
-template<class T>
-int MatrixClass<T>::getGreatest1DIndex() const {
+
+int MatrixClass::getGreatest1DIndex() const {
 	assert(height == 1);
 	double test = 0;
 	int result = 0;
@@ -17,15 +17,69 @@ int MatrixClass<T>::getGreatest1DIndex() const {
 	return result;
 }
 
-template<class T>
-MatrixClass<T>::MatrixClass(int inHeight, int inWidth) {
-	height = inHeight;
-	width = inWidth;
-	array = vector< vector<T> >(height, vector<T>(width));
+
+int MatrixClass::getStochasticOutput() const {
+	assert(height == 1);
+
+	vector<double> probabililties = getSoftmax();
+
+	int result = 0;
+	double randVal = rand()/(double)RAND_MAX;
+	double sum = 0;
+	for (int i = 0; i < width; i++) {
+		sum += probabililties[i];
+		if (sum < randVal) result++;
+	}
+	return result;
 }
 
-template<class T>
-void MatrixClass<T>::clear() {
+void MatrixClass::isolateNode(int node) {
+	assert(height == 1);
+	for (int i = 0; i < width; i++) {
+		if (i != node) array[0][i] = 0;
+		else array[0][i] = 1;
+	}
+}
+
+
+MatrixClass::MatrixClass(int inHeight, int inWidth) {
+	height = inHeight;
+	width = inWidth;
+	array = vector< vector<double> >(height, vector<double>(width));
+}
+
+
+vector<double> MatrixClass::getSoftmax() const {
+	assert(height == 1);
+	vector<double> result(width);
+	
+	double sum = 0;
+	double maxNum = 0;
+	int maxIdx = 0;
+	for (int i = 0; i < width; i++) {
+		if (array[0][i] > maxNum) {
+			maxNum = array[0][i];
+			maxIdx = i;
+		}
+		sum += array[0][i];
+	}
+	
+	double expSum = 0;
+	for (int i = 0; i < width; i++) {
+		double val = array[0][i];
+		result[i] = exp(val - maxNum);
+		expSum += result[i];
+	}
+
+	for (int i = 0; i < width; i++) {
+		result[i] /= expSum;
+	}
+	
+	return result;
+}
+
+
+void MatrixClass::clear() {
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
 			array[i][j] = 0;
@@ -33,16 +87,15 @@ void MatrixClass<T>::clear() {
 	}
 }
 
-template<class T>
-MatrixClass<T>::MatrixClass(vector< vector<T> > const &inArray) {
+MatrixClass::MatrixClass(vector< vector<double> > const &inArray) {
 	assert(inArray.size() != 0);
 	height = inArray.size();
 	width = inArray[0].size();
 	array = inArray;
 }
 
-template<class T>
-MatrixClass<T> MatrixClass<T>::times(double const &value) {
+
+MatrixClass MatrixClass::times(double const &value) {
 	MatrixClass result(height, width);
 
 	for (int i = 0; i < height; i++) {
@@ -54,15 +107,15 @@ MatrixClass<T> MatrixClass<T>::times(double const &value) {
 	return result;
 }
 
-template<class T>
-MatrixClass<T> MatrixClass<T>::operator*(double const value) {
+
+MatrixClass MatrixClass::operator*(double const value) {
 	return this->times(value);
 }
 
-template<class T>
-MatrixClass<T> MatrixClass<T>::plus(MatrixClass<T> const &m) const {
+
+MatrixClass MatrixClass::plus(MatrixClass const &m) const {
 	assert(height == m.height && width == m.width);
-	MatrixClass<T> result(height, width);
+	MatrixClass result(height, width);
 
 	for (int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
@@ -73,13 +126,13 @@ MatrixClass<T> MatrixClass<T>::plus(MatrixClass<T> const &m) const {
 	return result;
 }
 
-template<class T>
-MatrixClass<T> MatrixClass<T>::operator+(MatrixClass<T> const &m) const {
+
+MatrixClass MatrixClass::operator+(MatrixClass const &m) const {
 	return this->plus(m);
 }
 
-template<class T>
-MatrixClass<T> MatrixClass<T>::minus(MatrixClass<T> const &m) const {
+
+MatrixClass MatrixClass::minus(MatrixClass const &m) const {
 	assert(height == m.height && width == m.width);
 	MatrixClass result(height, width);
 
@@ -92,13 +145,13 @@ MatrixClass<T> MatrixClass<T>::minus(MatrixClass<T> const &m) const {
 	return result;
 }
 
-template<class T>
-MatrixClass<T> MatrixClass<T>::operator-(MatrixClass<T> const &m) const {
+
+MatrixClass MatrixClass::operator-(MatrixClass const &m) const {
 	return this->minus(m);
 }
 
-template<class T>
-MatrixClass<T> MatrixClass<T>::times(MatrixClass<T> const &m) const {
+
+MatrixClass MatrixClass::times(MatrixClass const &m) const {
 	assert(height == m.height && width == m.width);
 	MatrixClass result(height, width);
 
@@ -110,13 +163,13 @@ MatrixClass<T> MatrixClass<T>::times(MatrixClass<T> const &m) const {
 	return result;
 }
 
-template<class T>
-MatrixClass<T> MatrixClass<T>::operator*(MatrixClass<T> const &m) const {
+
+MatrixClass MatrixClass::operator*(MatrixClass const &m) const {
 	return this->times(m);
 }
 
-template<class T>
-MatrixClass<T> MatrixClass<T>::dot(MatrixClass<T> const &m) const {
+
+MatrixClass MatrixClass::dot(MatrixClass const &m) const {
 	assert(width == m.height);
 	MatrixClass result(height, m.width);
 	double w = 0;
@@ -134,8 +187,8 @@ MatrixClass<T> MatrixClass<T>::dot(MatrixClass<T> const &m) const {
 	return result;
 }
 
-template<class T>
-MatrixClass<T> MatrixClass<T>::transpose() const { // ij element becomes ji element
+
+MatrixClass MatrixClass::transpose() const { // ij element becomes ji element
 	MatrixClass result(width, height);
 
 	for (int i = 0; i < width; i++) {
@@ -146,8 +199,8 @@ MatrixClass<T> MatrixClass<T>::transpose() const { // ij element becomes ji elem
 	return result;
 }
 
-template<class T>
-MatrixClass<T> MatrixClass<T>::applyFunction(double(*function)(double)) const {
+
+MatrixClass MatrixClass::applyFunction(double(*function)(double)) const {
 	MatrixClass result(height, width);
 
 	for (int i = 0; i < height; i++) {
@@ -159,10 +212,10 @@ MatrixClass<T> MatrixClass<T>::applyFunction(double(*function)(double)) const {
 	return result;
 }
 
-template<class T>
-void MatrixClass<T>::print(std::ostream &flux) const { // pretty print, taking into account the space between each element of the matrix
-	int *maxLength;
-	maxLength = new int[width];
+
+void MatrixClass::print(std::ostream &flux) const { // pretty print, taking into account the space between each element of the matrix
+	unsigned int *maxLength;
+	maxLength = new unsigned int[width];
 	std::stringstream ss;
 
 	for (int i = 0; i < width; i++) {
@@ -183,7 +236,7 @@ void MatrixClass<T>::print(std::ostream &flux) const { // pretty print, taking i
 		for (int j = 0; j < width; j++) {
 			flux << array[i][j];
 			ss << array[i][j];
-			for (int k = 0; k < maxLength[j] - ss.str().size() + 1; k++) {
+			for (unsigned int k = 0; k < maxLength[j] - ss.str().size() + 1; k++) {
 				flux << " ";
 			}
 			ss.str(std::string());
@@ -194,8 +247,8 @@ void MatrixClass<T>::print(std::ostream &flux) const { // pretty print, taking i
 	delete maxLength;
 }
 
-template<class T>
-std::ostream& operator<<(std::ostream &flux, MatrixClass<T> const &m) {
+
+std::ostream& operator<<(std::ostream &flux, MatrixClass const &m) {
 	m.print(flux);
 	return flux;
 }

@@ -1,110 +1,25 @@
 #include "NNClass.h"
 
-int NNClass::compute(GameStateClass &curState, bool agentIsTrainging = false) {
+int NNClass::compute(GameStateClass &curState) {
 
-	nodeLayer[0] = MatrixClass<double>({ curState.getState() });
-	
-	for (int i = 1; i < numLayers; i++) {
-		nodeLayer[i] = ((nodeLayer[i-1].dot(weight[i-1]) + bias[i-1]).applyFunction(activationType[i-1]));
-	}
-
-	if (agentIsTrainging) {
-	}
-	int move = nodeLayer[numLayers - 1].getGreatest1DIndex();
-
-	prevStates.push_back(gameState);
-	prevMoves.push_back(move);
-
+	MatrixClass temp = computeT(curState);
+	//cout << temp;
+	int move = temp.getStochasticOutput();
 	//return the output node index with the highest activation
 	return move;
 }
 
-void NNClass::PGtrain() {
-	if (curEpisodeNum < miniBatchSize) {
-		curEpisodeNum++;
-		
+MatrixClass NNClass::computeT(GameStateClass &curState) {
+	nodeLayer[0] = MatrixClass({ curState.getState() });
+
+	for (int i = 1; i < numLayers; i++) {
+		nodeLayer[i] = ((nodeLayer[i - 1].dot(weight[i - 1]) + bias[i - 1]).applyFunction(activationType[i - 1]));
 	}
-	else {
-		//conduct the policy gradient training.
-
-
-
-
-
-
-
-		curEpisodeNum = 0;
-		prevStates.clear();
-		prevMoves.clear();
-	}
-}
-
-void NNClass::backPropogate(vector<double> expectedOutput) {
-	MatrixClass<double> expected({ expectedOutput });
-
-	//for a matrix with 2 hidden layers, i would expect to have 3 bias vectors.
-	//I subtract by one due to the zero based system.
-	int numB = bias.size()-1;
-
-	//for numB = 2
-	//dJdB[2] =  (nodeLayer[3]      - expected) * ((nodeLayer[2]   .dot(weight[2]))    + bias[2])   .applyFunction(activationTypePrime[3]);
-	dJdB[numB] = (nodeLayer[numB+1] - expected) * ((nodeLayer[numB].dot(weight[numB])) + bias[numB]).applyFunction(activationTypePrime[numB+1]);
-
-	for (int i = numB-1; i >= 0; i--) {
-		//for numB = 1
-		//dJdB[1] = dJdB[2].dot(weight[2].transpose())   * (nodeLayer[1].dot(weight[1])   + bias[1]).applyFunction(activationTypePrime[2]);
-		dJdB[i] = dJdB[i+1].dot(weight[i+1].transpose()) * (nodeLayer[i].dot(weight[i])   + bias[i]).applyFunction(activationTypePrime[i+1]);
-	}
-
-	for (int i = 0; i < numB; i++) {
-		//compute the change in the weight matrix
-		dJdW[i] = (nodeLayer[i]).transpose().dot(dJdB[i]);
-
-		//add cummulative adjuestments for future updates to the weights and biases.
-		dJdBc[i] = dJdBc[i] + dJdB[i];
-		dJdWc[i] = dJdWc[i] + dJdW[i];
-	}	
-}
-
-void NNClass::updateWeightsAndBiases() {
-	for (int i = 0; i < numLayers-1; i++) {
-		weight[i] = weight[i] - (dJdWc[i] * (learningRate / miniBatchSize) + prev_dJdWc[i] * momentumFactor);
-		dJdWc[i].clear();
-	}
-
-	for (int i = 0; i < numLayers-1; i++) {
-		bias[i] = bias[i] - (dJdBc[i] * (learningRate / miniBatchSize) + prev_dJdBc[i] * momentumFactor);
-		dJdBc[i].clear();
-	}
-
-	prev_dJdBc = dJdBc;
-	prev_dJdWc = dJdWc;
-}
-
-NNClass::NNClass(){}
-
-void NNClass::setLearningRate(double in) {
-	learningRate = in;
-}
-
-void NNClass::setMiniBatchSize(int in) {
-	miniBatchSize = in;
-}
-
-void NNClass::enableMomentum(double in) {
-	momentumFactor = in;
+	//return the output node index with the highest activation
+	return nodeLayer[numLayers-1];
 }
 
 NNClass::NNClass(int numInputNodes, int inputNodeType, int numOutputNodes, int outputNodeType) {
-	momentumFactor = 0;
-	curEpisodeNum = 0;
-	learningRate = DEFAULT_LEARNING_RATE;
-	miniBatchSize = DEFAULT_MINIBATCH_SIZE;
-	discountFactor = DEFAULT_DISCOUNT_FACTOR;
-
-	prevStates.push_back(vector< GameStateClass >());
-	prevMoves.push_back(vector<int>());
-
 	nodesInLayer.push_back(numInputNodes);
 	if (inputNodeType == SIGMOID) {
 		activationType.push_back(sigmoid);
@@ -142,31 +57,17 @@ void NNClass::addHiddenLayer(int numNodes, int nodeType) {
 }
 
 void NNClass::init() {
-
-	nodeLayer.push_back(MatrixClass<double>(1, nodesInLayer[0]));
+	nodeLayer.push_back(MatrixClass(1, nodesInLayer[0]));
 	for (int i = 1; i < numLayers; i++) {
-		nodeLayer.push_back(MatrixClass<double>(1, nodesInLayer[i]));
+		nodeLayer.push_back(MatrixClass(1, nodesInLayer[i]));
 
 		//dJdB, dJdW, hLayer, weight, bias, dJdBc, dJdWc;
-		weight.push_back(MatrixClass<double>(nodesInLayer[i-1], nodesInLayer[i]));
-		dJdWc.push_back(MatrixClass<double>(nodesInLayer[i-1], nodesInLayer[i]));
-		dJdW.push_back(MatrixClass<double>(nodesInLayer[i-1], nodesInLayer[i]));
+		weight.push_back(MatrixClass(nodesInLayer[i-1], nodesInLayer[i]));
+		bias.push_back(MatrixClass(1, nodesInLayer[i]));
 
-		bias.push_back(MatrixClass<double>(1, nodesInLayer[i]));
-		dJdBc.push_back(MatrixClass<double>(1, nodesInLayer[i]));
-		dJdB.push_back(MatrixClass<double>(1, nodesInLayer[i]));
-		
 		weight[i-1] = weight[i-1].applyFunction(random);
-		dJdWc[i-1].clear();
-		dJdW[i-1].clear();
-
 		bias[i-1] = bias[i-1].applyFunction(random);
-		dJdBc[i-1].clear();
-		dJdB[i-1].clear();
 	}
-
-	prev_dJdBc = dJdBc;
-	prev_dJdWc = dJdWc;
 }
 
 double random(double x) {
@@ -191,5 +92,3 @@ double reluPrime(double x) {
 	if (x > 0) return 1;
 	else return 0;
 }
-
-NNClass::~NNClass(){}
