@@ -14,16 +14,16 @@ const double LEARNING_RATE = 0.001;
 const double MOMENTUM_RATE = 0.01;
 const double DISCOUNT_FACTOR = 0.2;
 const int GAMES_IN_BATCH = 20;
-const bool AGENT_PLAYING = true;
-const bool AGENT_TRAINING = true;
+const bool AGENT_PLAYING = false;
+const bool AGENT_TRAINING = false;
 const bool ENABLE_RANDOM = true;
-const bool WATCH_TRAINING = false;
+const bool WATCH_TRAINING = true;
 
 int main(){
 	if (ENABLE_RANDOM) srand(unsigned int(time(0)));
 	else srand(1);
 
-	sf::RenderWindow window(sf::VideoMode(250, 350), "Snake!");
+	sf::RenderWindow window(sf::VideoMode(550, 650), "Snake!");
 	SnakeGameClass game(window);
 	GameStateClass curState;
 
