@@ -29,10 +29,14 @@ QAgentClass::QAgentClass(SnakeGameClass game) {
 								QValue[posX][posY][negX][negY][fPosX][fPosY][fNegX] = new double *[y];
 								
 								for (int fNegY = 0; fNegY < y; fNegY++) {
-                                    QValue[posX][posY][negX][negY][fPosX][fPosY][fNegX][fNegY] = new double[4];
+									if (fNegY > 10 || fNegX > 10 || fPosX > 10 || fPosY > 10) {
+										cout << fPosX << " " << fPosY << " " << fNegX << " " << fNegY << endl;
+									}
+
+									else QValue[posX][posY][negX][negY][fPosX][fPosY][fNegX][fNegY] = new double[4];
 									
 									for (int i = 0; i < 4; i++) {
-										QValue[posX][posY][negX][negY][fPosX][fPosY][fNegX][fNegY][i] = random();
+										//QValue[posX][posY][negX][negY][fPosX][fPosY][fNegX][fNegY][i] = random();
 									}
 								}
 							}
