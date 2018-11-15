@@ -2,16 +2,7 @@
 #include "MapClass.h"
 #include "SnakeBodyNodeClass.h"
 #include <SFML/system/Vector2.hpp>
-
-const int GAME_OVER = 99;
-const int EAT_FOOD = 10;
-const int CLEAR = 11;
-
-const int NO_CHANGE = -99;
-const int UP = 0;
-const int DOWN = 1;
-const int LEFT = 2;
-const int RIGHT = 3;
+#include "constants.h"
 
 class SnakeClass
 {

@@ -4,28 +4,27 @@
 #include "SnakeGameClass.h"
 #include <iostream>
 #include "QAgentClass.h"
+#include "GameStateClass.h"
+#include "constants.h"
 
 using namespace std;
 
-const bool AGENT_TRAINING = false;
-const float TIME_STEP_PER_ROUND = .95;
-const int INITIAL_TIME_PER_ROUND = 200; //milliseconds
-
-int main()
-{
-
-
+int main(){
 	sf::RenderWindow window(sf::VideoMode(450, 550), "Snake!");
 	SnakeGameClass game(window);
-	QAgentClass agent(game);
+	QAgentClass agent;
+	GameStateClass gameState;
+
+	int gameCount = 0;
+	bool updateScreen = true;
 
 	while (window.isOpen())	{
 		int nextMove = NO_CHANGE;
 		static int timePerRound = INITIAL_TIME_PER_ROUND; 
 
 		if (AGENT_TRAINING) {
-			game.getScore();
-			//agent.process(game.getState(),game.getScore());
+			game.getState(gameState);
+			nextMove = agent.getMove(gameState);
 		}
 		else {
 			sf::Event event;
@@ -46,13 +45,42 @@ int main()
 					}
 				}
 			}
-
-			game.moveSnake(nextMove);
-			this_thread::sleep_for(chrono::milliseconds(int(timePerRound)));
 		}
-		window.clear();
-		game.draw(window);
-		window.display();
+
+		bool snakeKilled = game.moveSnake(nextMove);
+
+		if(AGENT_TRAINING) game.getState(gameState);
+
+
+		
+
+		if (snakeKilled) {
+			gameCount++;
+			cout << "Game " << gameCount << " ended: " << gameState.score << endl;
+			if (gameCount > 20 && gameCount < 30000) updateScreen = false;
+			else updateScreen = true;
+		}
+		
+		if(updateScreen){
+			this_thread::sleep_for(chrono::milliseconds(int(timePerRound)));
+			window.clear();
+			game.draw(window);
+			window.display();
+		}
+
+		if (AGENT_TRAINING) {
+			agent.updateMatrix(gameState);
+			if (gameCount > INITIAL_TRAINING) {
+				double newDiscountFactor = INITIAL_DISCOUNT_FACTOR + 
+					(gameCount - INITIAL_TRAINING)*(MAX_DISCOUNT_FACTOR - INITIAL_DISCOUNT_FACTOR) / (TRAINING_GAMES - gameCount);
+				agent.changeDiscountFactor(newDiscountFactor);
+			}
+		}
+
+		if (snakeKilled) {
+			game.reset();
+			agent.reset();
+		}
 	}
 
 	return 0;

@@ -6,8 +6,7 @@
 #include "BoxClass.h"
 #include "ScoreBoardClass.h"
 
-class MapClass
-{
+class MapClass{
 private:
 	BoxClass **mapTiles;
 	int _x;

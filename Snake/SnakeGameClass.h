@@ -3,11 +3,10 @@
 #include "MapClass.h"
 #include "FoodClass.h"
 #include "SnakeClass.h"
+#include "GameStateClass.h"
+#include "constants.h"
 
-const bool ENABLE_RANDOM = false;
-
-class SnakeGameClass
-{
+class SnakeGameClass{
 private:
 	MapClass map;
 	SnakeClass *snake;
@@ -17,10 +16,9 @@ public:
 	SnakeGameClass();
 	SnakeGameClass(sf::RenderWindow &window);
 	~SnakeGameClass();
-	void moveSnake(int nextMove);
+	bool moveSnake(int nextMove);
 	void draw(sf::RenderWindow &window);
-	int getScore();
-	uint8_t* getState();
+	void getState(GameStateClass &s);
 	int getMapWidth();
 	int getMapHeight();
 };

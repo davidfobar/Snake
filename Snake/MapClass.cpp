@@ -12,29 +12,37 @@ sf::Vector2u MapClass::getSize() {
 
 int MapClass::getNearestPosX(sf::Vector2u loc) {
 	int count = 0;
-	while(mapTiles[loc.x++][loc.y].getColor() != WHITE) {
+	while(mapTiles[loc.x][loc.y].getColor() != WHITE) {
+		if (loc.x == _x-1) break;
 		count++;
+		loc.x++;
 	}
 	return count;
 }
 int MapClass::getNearestPosY(sf::Vector2u loc) {
 	int count = 0;
-	while (mapTiles[loc.x][loc.y++].getColor() != WHITE) {
+	while (mapTiles[loc.x][loc.y].getColor() != WHITE) {
+		if (loc.y == _y-1) break;
 		count++;
+		loc.y++;
 	}
 	return count;
 }
 int MapClass::getNearestNegX(sf::Vector2u loc) {
 	int count = 0;
-	while (mapTiles[loc.x--][loc.y].getColor() != WHITE) {
+	while (mapTiles[loc.x][loc.y].getColor() != WHITE) {
+		if (loc.x == 0) break;
 		count++;
+		loc.x--;
 	}
 	return count;
 }
 int MapClass::getNearestNegY(sf::Vector2u loc) {
 	int count = 0;
-	while (mapTiles[loc.x][loc.y--].getColor() != WHITE) {
+	while (mapTiles[loc.x][loc.y].getColor() != WHITE) {
+		if (loc.y == 0) break;
 		count++;
+		loc.y--;
 	}
 	return count;
 }
@@ -100,10 +108,10 @@ sf::Vector2u MapClass::getRandLocation(){
 	int y;
 
 	while (!clearSpaceFound) {
-		x = rand() % (_x-1) + 1;
+		x = rand() % (_x-2) + 1;
 		y = rand() % (_y-2) + 1;
 
-		if (mapTiles[x][x].isNotFilled()) clearSpaceFound = true;
+		if (mapTiles[x][y].isNotFilled()) clearSpaceFound = true;
 	}
 	randLoc.x = x;
 	randLoc.y = y;

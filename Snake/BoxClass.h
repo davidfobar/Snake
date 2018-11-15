@@ -2,12 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/system/Vector2.hpp>
-
-const int BOX_SIZE = 50;
-const int BLACK = 0;
-const int WHITE = 1;
-const int BLUE = 2;
-const int RED = 3;
+#include "constants.h"
 
 class BoxClass
 {
